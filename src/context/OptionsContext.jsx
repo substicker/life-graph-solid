@@ -1,14 +1,21 @@
-import { useContext, createContext } from "solid-js";
-import { createStore } from "solid-js/store";
+import { useContext, createContext, createEffect } from "solid-js";
+import { createStore, unwrap } from "solid-js/store";
 
 const OptionContext = createContext();
 
 export function OptionProvider(props){
-  const [options, setOptions] = createStore({}),
+  const [options, setOptions] = createStore({
+    title: 'Untitled',
+    description: '',
+    yearsExpected: 80,
+  }),
    option = [
     options,
     setOptions
   ]
+  createEffect(() => {
+    console.log(unwrap(options))
+  })
 
    return (
     <OptionContext.Provider value={option}>
