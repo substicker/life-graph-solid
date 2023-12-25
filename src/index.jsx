@@ -3,12 +3,12 @@ import { render } from 'solid-js/web'
 
 import './index.css'
 import App from './App'
-import { OptionProvider } from './context/OptionsContext'
+import { AppProvider } from './context/AppContext'
 
 const root = document.getElementById('root')
 
 render(() => 
-  <OptionProvider value={{}}>
+  <AppProvider value={{}}>
     <App />
-  </OptionProvider>
+  </AppProvider>
 , root)
