@@ -1,9 +1,8 @@
 import { For } from "solid-js";
-import { useOptions } from "../context/OptionsContext";
-import Week from './Week'
+import { useAppContext } from "../context/AppContext";
 
 export default function Life(){
-  const [options] = useOptions();
+  const [options] = useAppContext();
   const totalWeeks = () => Array.from(Array(Math.round(options.yearsExpected >= 100 ? 100 * 52 : options.yearsExpected * 52 )).keys());
   return (
     <main class="w-full flex flex-col items-center">
@@ -13,7 +12,9 @@ export default function Life(){
       </header>
       <section class="w-max grid gap-1 grid-cols-[repeat(52,_minmax(0,_1fr))] grid-flow-row">
         <For each={totalWeeks()}>{(week) =>
-          <Week />
+          <div class="w-4 h-4 border-2 border-neutral-500"
+            style={{'background-color': ''}}
+          />
         }</For>
       </section>
     </main>
