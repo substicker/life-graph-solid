@@ -7,6 +7,7 @@ export function OptionProvider(props){
   const [options, setOptions] = createStore({
     title: 'Untitled',
     description: '',
+    born: 0,
     yearsExpected: 80,
   }),
    option = [
