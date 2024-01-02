@@ -1,28 +1,15 @@
-## Usage
+# life-graph-solid
+Aplicación hecha experimentando con [SolidJS](https://www.solidjs.com/).
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+## !! Aviso !!
+Este repositorio fue hecho en poco tiempo y poco cuidado, eventualmente se irá mejorando y reduciendo la cantidad de problemas que existen dentro del programa. Existen varios a causa de la velocidad en que se quiso tener una primera versión. 
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+## Instalación
+1. Tener instalado [node.js](https://nodejs.org/en)
+2. Clonar este repositorio
+3. Instalar dependencias con `npm i` en la consola
+4. Iniciar servidor con `npm run dev`
+5. Ingresa a la IP que aparece con el navegador web.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm run dev`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-Learn more about deploying your application with the [documentations](https://vitejs.dev/guide/static-deploy.html)
+## Metas
+Por definir.
