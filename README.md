@@ -1,6 +1,7 @@
 # life-graph-solid
 Aplicación hecha experimentando con [SolidJS](https://www.solidjs.com/).
 
+![screenshot](docs/screenshot.png)
 ## !! Aviso !!
 Este repositorio fue hecho en poco tiempo y poco cuidado, eventualmente se irá mejorando y reduciendo la cantidad de problemas que existen dentro del programa. Existen varios a causa de la velocidad en que se quiso tener una primera versión. 
 
