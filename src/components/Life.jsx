@@ -18,9 +18,6 @@ export default function Life(){
   const expected = () => options.yearsExpected;
   const events = () => lifeEvents;
 
-  createEffect(on(events, () => {
-    console.log('Hey')
-  }))
 
 
   function getDefault(start = new Date(), end = new Date){
