@@ -10,7 +10,9 @@ function App() {
   return (
     <div class="flex">
       <Aside />
-      <Life />
+      <div class="w-full flex justify-center">
+        <Life />
+      </div>
     </div>
   )
 }
