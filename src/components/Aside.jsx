@@ -22,6 +22,11 @@ export default function Aside(){
     setLifeEvents(id, key, value)
   }
 
+  function updateView(){
+    setOptions('yearsExpected', options.yearsExpected + 1)
+    setOptions('yearsExpected', options.yearsExpected - 1)
+  }
+
   return (
     <aside class="p-6 h-screen border-r border-neutral-400 w-2/12 [&_label]:inline-block [&_label]:w-full [&_input]:border-2 [&_input]:border-neutral-400">
       <div>
@@ -39,6 +44,7 @@ export default function Aside(){
         <label for="yearsExpected">Expectativa de años de vida</label>
         <input name="yearsExpected" type="number" max={100} value={options.yearsExpected} onChange={(e) => {setOptions('yearsExpected', Number(e.target.value))}}/>
         <section class="mt-4 border border-nuetral-400">
+          <button onClick={() => updateView()} class="bg-gray-200 border w-full border-gray-500 rounded-md my-2 p-3">Actualizar</button>
           <header>
             <button class="flex justify-between w-full" onClick={() => (addLifeEvent())}>Añadir evento de vida <img src="add.svg"/></button>
           </header>
