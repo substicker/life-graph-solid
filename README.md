@@ -1,5 +1,5 @@
 # life-graph-solid
-Aplicación hecha experimentando con [SolidJS](https://www.solidjs.com/).
+Aplicación hecha experimentando con [SolidJS](https://www.solidjs.com/).  Proyecto inspirado en [Life-Graph (MIT) de K20shores](https://github.com/K20shores/Life-Graph).
 
 ![screenshot](docs/screenshot.png)
 ## !! Aviso !!
