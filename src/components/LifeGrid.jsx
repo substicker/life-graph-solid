@@ -20,22 +20,27 @@ export default function LifeGrid(){
 
   onMount(() => {
     const ctx = canvas.getContext('2d');
-
+    const size = {height: 15, width: 15};
+    const canvasPadding = {x: 100, y: 20};
+    const margin = {x: 10, y: 10};
     createEffect(on(years, () => {
-      console.log("Updating canvas...")
-      ctx.clearRect(0, 0, canvas.width, canvas.height);        
+      console.log("Updating canvas...")      
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);        
       drawGrid();
       drawEvents(lifeEvents);
     }))
+
+    window.addEventListener('scroll', () => {
+      console.log("hey")
+    })
 
     function drawGrid() {
       ctx.font = "15px mono";
       ctx.textAlign = "right";
       ctx.lineWidth = "1";
-      let size = {height: 15, width: 15};
-      let canvasPadding = {x: 100, y: 20};
-      let margin = {x: 10, y: 10};
       
+
       for (let i = 0; i < years(); i++){
         
         for (let j = 0; j < 52; j++) {
@@ -58,9 +63,6 @@ export default function LifeGrid(){
 
     function drawEvents(lifeEvents) {
       ctx.lineWidth = "1";
-      let size = {height: 15, width: 15};
-      let canvasPadding = {x: 100, y: 20};
-      let margin = {x: 10, y: 10};
       lifeEvents.forEach(lifeEvent => {
         console.log(lifeEvent.startWeek, lifeEvent.endWeek);
         let start = calcWeeksBetweenDates(options.born, lifeEvent.startWeek);
@@ -88,5 +90,5 @@ export default function LifeGrid(){
     }
   })
 
-  return <canvas ref={canvas} id="life-grid" height="2500" width="1500"></canvas>
+  return <canvas ref={canvas} id="life-grid" height="2500" width="1500" class="bg-red-500"></canvas>
 }
