@@ -1,6 +1,7 @@
 import { For, batch, createEffect, createSignal, on } from "solid-js";
 import { useAppContext } from "../context/AppContext";
 import { createStore, unwrap } from "solid-js/store";
+import LifeGrid from "./LifeGrid";
 
 const DEFAULT_WEEKEVENT = {
   id: -1,
@@ -11,7 +12,7 @@ const DEFAULT_WEEKEVENT = {
 }
 
 
-export default function Life(){
+export default function Life(props){
   const [options, setOptions, lifeEvents, setLifeEvents, ] = useAppContext();
   const [weeks, setWeeks] = createStore([]);
   const [idSum, setIdSum] = createSignal();
@@ -90,9 +91,11 @@ export default function Life(){
         <h1 class="text-4xl">{options.title == "Untitled" ? "" : options.title}</h1>
         <h2 class="text-2xl font-light">{options.description}</h2>
       </header>
-      <section class="w-max grid gap-1 grid-cols-[repeat(53,_minmax(0,_1fr))] grid-flow-row">
-
-        <For each={weeks}>{(week, i) =>
+      <section>
+        {props.children}
+      </section>
+      {/* <section class="w-max grid gap-1 grid-cols-[repeat(53,_minmax(0,_1fr))] grid-flow-row">
+       <For each={weeks}>{(week, i) =>
         <>
           {i() % 52 == 0 && 
             <div class="w-5 h-4 flex items-center justify-center">
@@ -102,7 +105,7 @@ export default function Life(){
           <Week week={week}/>
         </>
         }</For>
-      </section>
+      </section> */}
     </main>
   )
 }
