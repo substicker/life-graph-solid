@@ -1,51 +1,43 @@
-import { onMount } from "solid-js";
+import { createEffect, on, onMount } from "solid-js";
+import { useAppContext } from "../context/AppContext";
+import { unwrap } from "solid-js/store";
 
 
 
 export default function LifeGrid(){
-  let years = 80;
+  // Cómo hago que no se vea borroso maldito canvas!
+  const [options, setOptions, lifeEvents, setLifeEvents, ] = useAppContext();
+
+  
+  let years = () => options.yearsExpected;
   let canvas;
+
+  function calcWeeksBetweenDates(fechaInicio, fechaFin) {
+    const milisegundosEnUnaSemana = 7 * 24 * 60 * 60 * 1000;
+    const diferenciaEnMilisegundos = fechaFin - fechaInicio;
+    return Math.floor(diferenciaEnMilisegundos / milisegundosEnUnaSemana);
+  }
+
   onMount(() => {
     const ctx = canvas.getContext('2d');
-    const height = 2500;
-    const width = 1500;
-    // Cómo hago que no se vea borroso maldito canvas!
-    function fixHiPPICanvas() {
-      const ratio = window.devicePixelRatio;
-      window.devicePixelRatio=12;
-  
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
-      ctx.scale(ratio, ratio);
-    }
-    function fixBlurry(){
 
-      // Set display size (css pixels).
-      const size = 1500;
-      canvas.style.width = `${size}px`;
-      canvas.style.height = `${size}px`;
-
-      // Set actual size in memory (scaled to account for extra pixel density).
-      const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
-      canvas.width = Math.floor(size * scale);
-      canvas.height = Math.floor(size * scale);
-
-      ctx.scale(scale, scale);
-    }
+    createEffect(on(years, () => {
+      console.log("Updating canvas...")
+      ctx.clearRect(0, 0, canvas.width, canvas.height);        
+      drawGrid();
+      drawEvents(lifeEvents);
+    }))
 
     function drawGrid() {
-      fixBlurry();
-      ctx.font = "15px Arial";
+      ctx.font = "15px mono";
       ctx.textAlign = "right";
+      ctx.lineWidth = "1";
       let size = {height: 15, width: 15};
       let canvasPadding = {x: 100, y: 20};
       let margin = {x: 10, y: 10};
-
-      ctx.lineWidth = 2;
-      for (let i = 0; i < years; i++){
-
+      
+      for (let i = 0; i < years(); i++){
+        
         for (let j = 0; j < 52; j++) {
           ctx.fillStyle = i % 5 == 0 ? "black": "lightgray" ;
           ctx.strokeRect(
@@ -63,8 +55,38 @@ export default function LifeGrid(){
 
       }
     }
-    drawGrid();
+
+    function drawEvents(lifeEvents) {
+      ctx.lineWidth = "1";
+      let size = {height: 15, width: 15};
+      let canvasPadding = {x: 100, y: 20};
+      let margin = {x: 10, y: 10};
+      lifeEvents.forEach(lifeEvent => {
+        console.log(lifeEvent.startWeek, lifeEvent.endWeek);
+        let start = calcWeeksBetweenDates(options.born, lifeEvent.startWeek);
+        let end = calcWeeksBetweenDates(options.born, lifeEvent.endWeek);
+        console.warn(start,end);
+        for (let i = start; i <= end; i++){
+          let j = Math.floor(i / 52);
+          ctx.fillStyle = lifeEvent.eventColor;
+
+          
+          ctx.fillRect(
+            canvasPadding.x + (size.width + margin.x) * (i % 52),
+            (canvasPadding.y + (size.height + margin.y) * j ),
+            size.width,
+            size.height,
+          );
+          ctx.strokeRect(
+            canvasPadding.x + (size.width + margin.x) * (i % 52),
+            (canvasPadding.y + (size.height + margin.y) * j ),
+            size.width,
+            size.height,
+          );
+        }
+      });
+    }
   })
 
-  return <canvas ref={canvas} height="2500" width="1500" class="subpixel-antialiased"></canvas>
+  return <canvas ref={canvas} id="life-grid" height="2500" width="1500"></canvas>
 }
