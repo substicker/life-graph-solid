@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Aside from './components/Aside'
 import Life from './components/Life'
+import LifeGrid from './components/LifeGrid'
 
 function App() {
  
@@ -11,7 +12,9 @@ function App() {
     <div class="flex">
       <Aside />
       <div class="w-full flex justify-center">
-        <Life />
+        <Life>
+          <LifeGrid />
+        </Life>
       </div>
     </div>
   )
