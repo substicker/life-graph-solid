@@ -5,7 +5,6 @@ import { unwrap } from "solid-js/store";
 
 
 export default function LifeGrid(){
-  // Cómo hago que no se vea borroso maldito canvas!
   const [options, setOptions, lifeEvents, setLifeEvents, ] = useAppContext();
 
   
@@ -21,8 +20,28 @@ export default function LifeGrid(){
   onMount(() => {
     const ctx = canvas.getContext('2d');
     const size = {height: 15, width: 15};
-    const canvasPadding = {x: 100, y: 20};
+    const canvasPadding = {x: 30, y: 20};
     const margin = {x: 10, y: 10};
+
+    canvas.addEventListener('mousemove', (e) => {
+      var rect = canvas.getBoundingClientRect();
+      let mousePos = {
+        x: Math.round(e.clientX - rect.left),
+        y: Math.round(e.clientY - rect.top)
+      };
+      let xBlockLocation = (mousePos.x - canvasPadding.x) % (size.width + margin.x);
+      let yBlockLocation = (mousePos.y - canvasPadding.y) % (size.height + margin.y);
+      let xMouseBlockLocation = Math.round((mousePos.x - canvasPadding.x) / (size.width + margin.x));
+      let yMouseBlockLocation = Math.round((mousePos.y - canvasPadding.y) / (size.height + margin.y));
+      if (yBlockLocation <= 0  || yBlockLocation <= 0) return
+      
+      if (xBlockLocation <= 15 && yBlockLocation <= 15){
+        console.log("En bloque n°", xMouseBlockLocation, yMouseBlockLocation);
+
+      }
+
+    })
+
     createEffect(on(years, () => {
       console.log("Updating canvas...")      
       ctx.fillStyle = "white";
@@ -30,10 +49,6 @@ export default function LifeGrid(){
       drawGrid();
       drawEvents(lifeEvents);
     }))
-
-    window.addEventListener('scroll', () => {
-      console.log("hey")
-    })
 
     function drawGrid() {
       ctx.font = "15px mono";
@@ -72,7 +87,6 @@ export default function LifeGrid(){
           let j = Math.floor(i / 52);
           ctx.fillStyle = lifeEvent.eventColor;
 
-          
           ctx.fillRect(
             canvasPadding.x + (size.width + margin.x) * (i % 52),
             (canvasPadding.y + (size.height + margin.y) * j ),
@@ -90,5 +104,5 @@ export default function LifeGrid(){
     }
   })
 
-  return <canvas ref={canvas} id="life-grid" height="2500" width="1500" class="bg-red-500"></canvas>
+  return <canvas ref={canvas} id="life-grid" height="2500" width="1300" class="border border-black"></canvas>
 }
