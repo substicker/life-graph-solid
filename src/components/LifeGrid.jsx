@@ -20,8 +20,10 @@ export default function LifeGrid(){
   onMount(() => {
     const ctx = canvas.getContext('2d');
     const size = {height: 15, width: 15};
-    const canvasPadding = {x: 30, y: 20};
+
+    let canvasPadding = {x: 30, y: 15};
     const margin = {x: 10, y: 10};
+
 
     canvas.addEventListener('mousemove', (e) => {
       var rect = canvas.getBoundingClientRect();
@@ -37,15 +39,20 @@ export default function LifeGrid(){
       
       if (xBlockLocation <= 15 && yBlockLocation <= 15){
         console.log("En bloque n°", xMouseBlockLocation, yMouseBlockLocation);
-
       }
-
     })
 
     createEffect(on(years, () => {
       console.log("Updating canvas...")      
       ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);        
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
+      if (options.title !== ""){
+        canvasPadding.y = 150; 
+        
+      }
+      else {
+        canvasPadding.y = 15;
+      }
       drawGrid();
       drawEvents(lifeEvents);
     }))
@@ -69,7 +76,7 @@ export default function LifeGrid(){
           ctx.fillText(
             i.toString(),
             canvasPadding.x - 10, 
-            (size.height + margin.y) * i + 32,
+            ((size.height + margin.y) * i + 14) + canvasPadding.y,
           );
         }
 
