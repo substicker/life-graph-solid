@@ -9,12 +9,6 @@ const DEFAULT_LIFEEVENT = {
   endWeek: new Date(),
 }
 
-function clickOutside(el, accessor) {
-  const onClick = (e) => !el.contains(e.target) && accessor()?.();
-  document.body.addEventListener("click", onClick);
-
-  onCleanup(() => document.body.removeEventListener("click", onClick));
-}
 
 export default function Aside(){
   const [options, setOptions, lifeEvents, setLifeEvents] = useAppContext();
@@ -76,6 +70,8 @@ export default function Aside(){
             }</For>
           </div>
         </section>
+        <label for="darkMode" class="">Modo oscuro?</label>
+        <input type="checkbox" name="darkMode"  onInput={(e) => setOptions('darkMode', e.target.checked)}/>
       </div>
     </aside>
   )
