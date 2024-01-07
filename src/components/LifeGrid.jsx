@@ -19,6 +19,7 @@ export default function LifeGrid(){
 
   onMount(() => {
     const ctx = canvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-over'
     const size = {height: 15, width: 15};
 
     let canvasPadding = {x: 40, y: 15};
@@ -44,9 +45,6 @@ export default function LifeGrid(){
 
     createEffect(on(years, () => {
       console.log("Updating canvas...")
-      // Clean canvas
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height); 
       if (options.title !== ""){
         canvasPadding.y = 150; 
       }
@@ -60,24 +58,32 @@ export default function LifeGrid(){
     }))
 
     function drawGrid() {
+      
       ctx.font = "15px mono";
       ctx.textAlign = "right";
       ctx.lineWidth = "1";
-
+      
       for (let i = 0; i < years(); i++){
         
         for (let j = 0; j < 52; j++) {
-          ctx.fillStyle = i % 5 == 0 ? "black": "lightgray" ;
+          if (options.darkMode){
+            ctx.fillStyle = i % 5 == 0 ? "white": "#a0a0a0" ;
+          }
+          else {
+            ctx.fillStyle = i % 5 == 0 ? "black": "lightgray" ;
+            
+          }
+          ctx.fillText(
+            i.toString(),
+            canvasPadding.x - 10, 
+            ((size.height + margin.y) * i + 14) + canvasPadding.y,
+            );
+          ctx.fillStyle = options.darkMode ? "black" : "white";
           ctx.strokeRect(
             canvasPadding.x + (size.width + margin.x) * j,
             canvasPadding.y + (size.height + margin.y) * i,
             size.width,
             size.height,
-          );
-          ctx.fillText(
-            i.toString(),
-            canvasPadding.x - 10, 
-            ((size.height + margin.y) * i + 14) + canvasPadding.y,
           );
         }
 
