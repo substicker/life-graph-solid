@@ -6,10 +6,11 @@ const AppContext = createContext();
 export function AppProvider(props){
   const [lifeEvents, setLifeEvents] = createStore([])
   const [options, setOptions] = createStore({
-    title: 'Untitled',
+    title: '',
     description: '',
     born: new Date(),
-    yearsExpected: 80,
+    yearsExpected: 150,
+    darkMode: false,
   }),
    app = [
     options,
