@@ -1,4 +1,4 @@
-import { createEffect, on, onMount } from "solid-js";
+import { createEffect, createSignal, on, onMount } from "solid-js";
 import { useAppContext } from "../context/AppContext";
 import { unwrap } from "solid-js/store";
 
@@ -6,15 +6,20 @@ import { unwrap } from "solid-js/store";
 
 export default function LifeGrid(){
   const [options, setOptions, lifeEvents, setLifeEvents, ] = useAppContext();
-
+  const [hoverText, setHoverText] = createSignal("");
   
   let years = () => options.yearsExpected;
   let canvas;
+  let hover;
 
   function calcWeeksBetweenDates(fechaInicio, fechaFin) {
     const milisegundosEnUnaSemana = 7 * 24 * 60 * 60 * 1000;
     const diferenciaEnMilisegundos = fechaFin - fechaInicio;
     return Math.floor(diferenciaEnMilisegundos / milisegundosEnUnaSemana);
+  }
+
+  function addWeeksToDate(date, weeks) {
+    return new Date(date.getTime() + weeks * 7 * 24 * 60 * 60 * 1000);
   }
 
   onMount(() => {
@@ -36,10 +41,29 @@ export default function LifeGrid(){
       let yBlockLocation = (mousePos.y - canvasPadding.y) % (size.height + margin.y);
       let xMouseBlockLocation = Math.round((mousePos.x - canvasPadding.x) / (size.width + margin.x));
       let yMouseBlockLocation = Math.round((mousePos.y - canvasPadding.y) / (size.height + margin.y));
-      if (yBlockLocation <= 0  || yBlockLocation <= 0) return
+      if ((xMouseBlockLocation < 0 && xMouseBlockLocation >= 52)  || yMouseBlockLocation < 0) return
       
       if (xBlockLocation <= 15 && yBlockLocation <= 15){
+        console.log(canvas.getBoundingClientRect().x)
+        ctx.fillStyle = "#00ff00"
         console.log("En bloque n°", xMouseBlockLocation, yMouseBlockLocation);
+        console.warn(canvas.getBoundingClientRect().x)
+        let top = canvas.getBoundingClientRect().y + canvasPadding.y + yMouseBlockLocation * (margin.y + size.height);
+        let left = canvas.getBoundingClientRect().x + canvasPadding.x + xMouseBlockLocation * (margin.x + size.width);
+        console.log(top, left)
+        hover.style.left =  left + "px"
+        hover.style.top = (size.height) + top + "px"
+
+        let hoveredDate = structuredClone(options.born);
+        hoveredDate.setFullYear(hoveredDate.getFullYear() + yMouseBlockLocation);
+        console.log(addWeeksToDate(hoveredDate, xMouseBlockLocation * (yMouseBlockLocation == 0 ? 1 : xMouseBlockLocation)))
+        let hoverStart = addWeeksToDate(hoveredDate, xMouseBlockLocation * (yMouseBlockLocation == 0 ? 1 : xMouseBlockLocation))
+        let hoverEnd = addWeeksToDate(hoverStart, -1)
+        console.log(hoverStart, hoverEnd)
+        setHoverText(
+          hoverEnd.toLocaleString() + ' - ' + hoverStart.toLocaleString() 
+        )
+
       }
     })
 
@@ -93,7 +117,6 @@ export default function LifeGrid(){
     function drawEvents(lifeEvents) {
       ctx.lineWidth = "1";
       lifeEvents.forEach(lifeEvent => {
-        console.log(lifeEvent.startWeek, lifeEvent.endWeek);
         let start = calcWeeksBetweenDates(options.born, lifeEvent.startWeek);
         let end = calcWeeksBetweenDates(options.born, lifeEvent.endWeek);
         console.warn(start,end);
@@ -118,5 +141,25 @@ export default function LifeGrid(){
     }
   })
 
-  return <canvas ref={canvas} id="life-grid"  width="1350" class="border border-black"></canvas>
+  return (
+    <div>
+      <Portal>
+        <div ref={hover} class="fixed top-0 left-0 z-10 ">
+        <div class="w-0 h-0 
+          border-l-[5px] border-l-transparent
+          border-b-[10px] border-b-black
+          border-r-[5px] border-r-transparent">
+        </div>
+        <div class="bg-white w-56 h-16 border-black border">
+          <h1>{hoverText()}</h1>
+        </div>
+
+
+
+        </div>
+      </Portal>
+      <canvas ref={canvas} id="life-grid"  width="1350" class="border border-black"></canvas>
+
+    </div>
+  )
 }
