@@ -21,7 +21,7 @@ export default function LifeGrid(){
     const ctx = canvas.getContext('2d');
     const size = {height: 15, width: 15};
 
-    let canvasPadding = {x: 30, y: 15};
+    let canvasPadding = {x: 40, y: 15};
     const margin = {x: 10, y: 10};
 
 
@@ -43,16 +43,18 @@ export default function LifeGrid(){
     })
 
     createEffect(on(years, () => {
-      console.log("Updating canvas...")      
+      console.log("Updating canvas...")
+      // Clean canvas
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height); 
       if (options.title !== ""){
         canvasPadding.y = 150; 
-        
       }
       else {
         canvasPadding.y = 15;
       }
+      canvas.height = canvasPadding.y + (years() * (size.height + margin.y) );
+      // Draw content
       drawGrid();
       drawEvents(lifeEvents);
     }))
@@ -61,7 +63,6 @@ export default function LifeGrid(){
       ctx.font = "15px mono";
       ctx.textAlign = "right";
       ctx.lineWidth = "1";
-      
 
       for (let i = 0; i < years(); i++){
         
@@ -111,5 +112,5 @@ export default function LifeGrid(){
     }
   })
 
-  return <canvas ref={canvas} id="life-grid" height="2500" width="1300" class="border border-black"></canvas>
+  return <canvas ref={canvas} id="life-grid"  width="1350" class="border border-black"></canvas>
 }
